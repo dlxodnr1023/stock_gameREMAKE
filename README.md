@@ -1,5 +1,4 @@
 # [주식 게임]<br/>
-<br/>
 ## Made by Lee Tae Uk<br/>
 <br/>
 2023/12/12
