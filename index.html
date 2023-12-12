@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>[ 주식 게임 ] 제작 : 이태욱</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
+        body {
+            font-family: 'Black Han Sans', sans-serif;
+        }
+        #chart {
+            position: relative;
+            width: 1250px;
+            height: 300px;
+            border : 5px solid black;
+            border-radius: 5px;
+        }
+        .line {
+            position: absolute;
+            bottom: 0;
+            width: 25px;
+            background-color: rgb(195, 195, 195);
+        }
+        button {
+            font-family: 'Black Han Sans', sans-serif;
+            border : none;
+            background-color: #000000;
+            width : 200px;
+            height : 100px;
+            font-size : 40px;
+            border-radius: 10px;
+            color : white;
+            
+        }
+        input[type=text] {
+            font-family: 'Black Han Sans', sans-serif;
+            border : none;
+            background-color: #000000;
+            width : 200px;
+            height : 100px;
+            font-size : 40px;
+            border-radius: 10px;
+            color : white;
+            text-align:center;       
+        }
+        input[type=button] {
+            font-family: 'Black Han Sans', sans-serif;
+            border : none;
+            background-color: #000000;
+            width : 100px;
+            height : 30px;
+            font-size : 20px;
+            border-radius: 10px;
+            color : white;
+        }
+        #text {
+            text-align: center;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div id ="text">
+    <p id="time" style="    position: absolute;
+    left:20px">2023년 11월 24일 5시 기준</p>
+    </div>
+    <div id="chart"></div>
+    <div id ="text">
+    <p id="stockValue">현재 1주당 주가 : 100$</p> 
+    <p id="stockCount">현재 주식 수량 : 0개</p> 
+    <p id="money">현재 잔액 : 100$ (주식 : 0$)</p>
+    <div style="display: flex; justify-content: center;">
+        <div style="display: inline-block; text-align: center;">
+            <p id="events" style="color : black; font-size: 20px;">==============</p>
+        </div>
+        <div style="display: inline-block; text-align: center;">
+            <p id="events2" style="color : green; font-size: 20px;"></p>
+        </div>
+    </div>
+    <div style="position: absolute; top : 78.5%" id="what">
+    <input type="button" onclick="save()" value="저장">
+    <input type="button" onclick="load()" value="불러오기">
+</div>
+    <button id="stockBuy">주식 매수</button>
+    <button id="stockSell">주식 매도</button>
+    <input type="text" placeholder="0" id="buy" value="1">
+</div>
+    <script>
+        var stockValue = 100,
+        stockValue2 = 0,
+        stockCount = 0,
+        money = 100,
+        event = -1,
+        eventstime= 0,
+        chart = document.getElementById('chart'),
+        year = 2023,
+        month = 11,
+        day = 24,
+        hour = 0,
+        madegame = false,
+        event_on = false;
+
+        
+                 function updateGame() {
+                   var line = document.createElement('div'),
+        stockText = document.createElement('div'),
+        buyText = document.createElement('div');
+    eventstime++
+    stockValue2 = stockValue;
+    stockValue += Math.floor(Math.random() * 31) - 20;
+    if(eventstime==3) {
+                document.getElementById('events').innerText= '============'
+                document.getElementById('events2').innerText= '=='
+                } 
+                if(eventstime==4) {
+                    document.getElementById('events').innerText= '=========='
+                document.getElementById('events2').innerText= '===='
+                } 
+                if(eventstime==5) {
+                    document.getElementById('events').innerText= '========'
+                document.getElementById('events2').innerText= '======'
+                } 
+            if(eventstime==6) {
+                document.getElementById('events').innerText= '======'
+                document.getElementById('events2').innerText= '========'
+                 }
+                 if(eventstime==7) {
+                    document.getElementById('events').innerText= '===='
+                document.getElementById('events2').innerText= '=========='
+                 }
+                 if(eventstime==8) {
+                    document.getElementById('events').innerText= '=='
+                document.getElementById('events2').innerText= '============'
+                 }
+                 if(eventstime==9) {
+                    document.getElementById('events').innerText= ''
+                document.getElementById('events2').innerText= '=============='
+                 }
+                 if(eventstime==10) {
+                event = Math.floor(Math.random()* 15);
+                document.getElementById('events2').innerText= ''
+                 }
+    if (event>=0 && event<=1) {
+        line.style.backgroundColor = 'red';
+        stockValue += Math.floor(Math.random() * 70, 100);
+        document.getElementById('events').innerText= '[속보] 샘송전자 신제품의 대흥행!'
+        event_on = true;
+    }
+    if (event>=1 && event<=3) {
+        line.style.backgroundColor = 'red';
+        stockValue += 10 + Math.floor(Math.random() * 30, 50);
+        document.getElementById('events').innerText= '[뉴스] 샘송전자 과거 제품의 재조명!'
+        event_on = true;
+    }
+    if (event>=3 && event<=5) {
+        line.style.backgroundColor = 'blue';
+        stockValue -= Math.floor(Math.random() * 20, 50);
+        document.getElementById('events').innerText= '[긴급속보] 샘송전자 회장의 "갑질"논란'
+        event_on = true;
+    }
+    if (event==6) {
+        line.style.backgroundColor = 'blue';
+        stockValue -= Math.floor(Math.random() * 40, 70);
+        document.getElementById('events').innerText= '[긴급속보] 샘송전자 베트남 지부 공장의 폭탄 테러!'
+        event_on = true;
+    }
+    if (event>=6 && event<=8) {
+        line.style.backgroundColor = 'blue';
+        stockValue -= Math.floor(Math.random() * 50, 100);
+        document.getElementById('events').innerText= '[속보] 샘송전자 제품의 치명적힌 결합 발견.'
+        event_on = true;
+    }
+    if(stockValue<=30) {
+        stockValue = 10 + Math.floor(Math.random() * 20 , 31);
+    }else if(stockValue>250) {
+        stockValue = 270 - Math.floor(Math.random() * 50, 61);
+    }
+    if (stockValue2 < stockValue) {
+        line.style.backgroundColor = 'red';
+    } else if (stockValue2 > stockValue) {
+        line.style.backgroundColor = 'blue';
+    }
+    line.className = 'line';
+    line.style.height = stockValue+10 + 'px';
+    line.style.left = (chart.childNodes.length * 13)+1 + 'px';
+    
+    stockText.innerText = stockValue + "$"; // Set the text of the stock value
+    stockText.style.position = 'absolute'; // Position it absolutely
+    stockText.style.bottom = (stockValue-5) + 'px'; // Position it above the line
+    stockText.style.left = line.style.left; // Align it with the line
+    stockText.style.fontSize = 10.5 + "px";
+    stockText.style.color = "White"
+    chart.appendChild(line);
+    chart.appendChild(stockText);
+
+    if (chart.childNodes.length * 2 > chart.offsetWidth || parseInt(line.style.left, 10) >= 1230) {
+        while (chart.firstChild) {
+            chart.firstChild.remove();
+        }
+    }
+    document.getElementById('stockValue').innerText = '현재 주가 : ' + stockValue + "$";
+    if(eventstime==12) {
+        event_on = false;
+        eventstime = 2;
+        event = -1;
+    } 
+    if(eventstime==10) {
+        if(event>=9) {
+            document.getElementById('events').innerText= '샘송 전자 관련 기사가 없음'
+        }
+    } 
+    document.getElementById('money').innerText = '현재 잔액 : ' + money + "$" + ` (주식 : ${stockCount * stockValue}$)`;
+		 }
+
+document.getElementById("stockBuy").addEventListener("click", function(event) {
+  if (event.ctrlKey) {
+        if(money>=stockValue) {
+			var audio2 = new Audio('sound/buy.mp3');
+                audio2.play();
+		stockCount += Math.floor(money / stockValue)
+		money -= Math.floor(money / stockValue) * stockValue
+		}else{
+                var audio = new Audio('sound/back.mp3');
+        audio.play();
+    }
+  }else{
+	    if (money >= stockValue * Number(document.getElementById("buy").value)) {
+        var audio2 = new Audio('sound/buy.mp3');
+        audio2.play();
+
+        money -= stockValue * Number(document.getElementById("buy").value);
+        stockCount += Number(document.getElementById("buy").value);
+    }else{
+        var audio = new Audio('sound/back.mp3');
+        audio.play();
+    }
+}
+	    });
+
+document.getElementById("stockSell").addEventListener("click", function(event) {
+  if (event.ctrlKey) {
+    if(stockCount!==0) {
+			var audio2 = new Audio('sound/buy.mp3');
+                audio2.play();
+                money += stockValue * stockCount
+                stockCount = 0
+		}else{
+                var audio = new Audio('sound/back.mp3');
+        audio.play();
+    }
+  }else{
+            if (stockCount >= Number(document.getElementById("buy").value)) {
+                var audio2 = new Audio('sound/buy.mp3');
+                audio2.play();
+                money += stockValue * Number(document.getElementById("buy").value);
+                stockCount -= Number(document.getElementById("buy").value);
+            } else {
+                var audio = new Audio('sound/back.mp3');
+        audio.play();
+            }
+}
+	    });
+        function times() {
+            hour++
+            if(hour==25) {
+                day++
+                hour = 1
+                if(day==32) {
+                    day = 1
+                    month++
+                    if(month==13) {
+                        month = 1
+                        year++
+                    }
+                }
+            }
+            document.getElementById('time').innerText= `${year}년 ${month}월 ${day}일 ${hour < 10 ? '0' + hour : hour}시 기준`
+        }
+
+        function save() {
+            if(localStorage.getItem('code')!==null) {
+                if(confirm("백업 파일 " + localStorage.getItem('code') + "가 있습니다. 저장 파일을 삭제하고 저장하시겠습니까?")) {
+			var password = prompt("백업 파일의 비밀번호를 정해주세요.")
+                    localStorage.setItem('M', JSON.stringify(money));
+            localStorage.setItem('SV', JSON.stringify(stockValue));
+            localStorage.setItem('SC', JSON.stringify(stockCount)); 
+            localStorage.setItem('IB', JSON.stringify(Number(document.getElementById("buy").value)));
+            localStorage.setItem('code', JSON.stringify(`${year}년 ${month}월 ${day}일 [${Math.floor(Math.random()* 111111, 999999)}]`)); 
+            alert(`성공적으로 저장했습니다!\n${localStorage.getItem('code')}`)
+	localStorage.setItem('pw', JSON.stringify(password));
+                }
+            }else{
+            localStorage.setItem('M', JSON.stringify(money));
+            localStorage.setItem('SV', JSON.stringify(stockValue));
+            localStorage.setItem('SC', JSON.stringify(stockCount)); 
+            localStorage.setItem('IB', JSON.stringify(Number(document.getElementById("buy").value)));
+            localStorage.setItem('code', JSON.stringify(`${year}년 ${month}월 ${day}일 [${Math.floor(Math.random()* 111111, 999999)}]`)); 
+            alert(`성공적으로 저장했습니다!\n${localStorage.getItem('code')}`)
+	localStorage.setItem('pw', JSON.stringify(prompt("백업 파일의 비밀번호를 정해주세요.")));
+            }
+        }
+       function load() {
+  if (localStorage.getItem('code') !== null) {
+    if (confirm(`${localStorage.getItem('code')}을 플레이 하시겠습니까?`)) {
+      var password = prompt("백업파일의 비밀번호를 입력하세요.");
+      if (password == JSON.parse(localStorage.getItem('pw'))) {
+        money = Number(localStorage.getItem('M'));
+        stockValue = Number(localStorage.getItem('SV'));
+        stockCount = Number(localStorage.getItem('SC'));
+        document.getElementById("buy").innerText = Number(localStorage.getItem('IB'));
+        alert("성공적으로 불러왔습니다!");
+      } else {
+        alert("비밀번호가 잘못되었습니다.");
+      }
+    }
+  } else {
+    alert("저장된 파일이 없습니다.");
+  }
+}
+
+        document.addEventListener('keydown', function(event) {
+  if (event.key === '`') {
+    if(madegame==false) {
+        if(prompt("개발자 모드 입장 코드를 입력하세요")=="dldbghksdkatkf") {
+        alert("환영합니다!")
+        madegame = true
+        Fcommand();
+    }else{
+        alert("입장 코드가 틀렸습니다")
+    }
+
+    }else{
+        Fcommand();
+    }
+    }
+    if (event.keyCode == 27) {
+        if(confirm("게임을 다시 시작하시겠습니까?")==true) {
+        location.reload();
+        }
+    }
+});
+
+function Fcommand() {
+    var command = prompt("명령어를 입력하세요.")
+    if(command.startsWith("give money")) {
+        if(isNaN(Number(command.replace("give money ", "")))!==true) {
+            money += Number(command.replace("give money", ""))
+        }else{
+            alert(`명령구문이 잘못되었습니다. \n예 : give money 1000`)
+            
+        }
+    }
+    if(command.startsWith("set money")) {
+        if(isNaN(Number(command.replace("set money ", "")))!==true) {
+            money = Number(command.replace("set money", ""))
+        }else{
+            alert(`명령구문이 잘못되었습니다. \n예 : set money 1000`)
+            
+        }
+    }
+    if(command.startsWith("give stockValue")) {
+        if(isNaN(Number(command.replace("give stockValue ", "")))!==true) {
+            if(Number(command.replace("give stockValue ", ""))>250) {
+                alert("해당 명령어의 최대 수치는 250입니다")
+            }else{
+            stockValue += Number(command.replace("give stockValue ", ""))
+            }
+        }else{
+            alert(`명령구문이 잘못되었습니다. \n예 : give stockValue 1000`)
+            
+        }
+    }
+    if(command.startsWith("set stockValue")) {
+        if(isNaN(Number(command.replace("set stockValue ", "")))!==true) {
+            if(Number(command.replace("set stockValue ", ""))>250) {
+                alert("해당 명령어의 최대 수치는 250입니다")
+            }else{
+            stockValue = Number(command.replace("set stockValue ", ""))
+            }
+        }else{
+            alert(`명령구문이 잘못되었습니다. \n예 : set stockValue 1000`)
+            
+        }
+    }
+        if(command=="rock") {
+            alert("개발자 모드를 종료했습니다.");
+            madegame = false;
+    }
+        if(command=="1972") {
+            localStorage.setItem('code', JSON.stringify(`1972년 11월 23일 김두한은 오랜지병으로 사망하였다. [1972]`));
+		alert("1972년 11월 21일..")
+    }
+    if(command.startsWith("give stockCount")) {
+        if(isNaN(Number(command.replace("give stockCount ", "")))!==true) {
+            stockCount += Number(command.replace("give stockCount", ""))
+        }else{
+            alert(`명령구문이 잘못되었습니다. \n예 : give stockCount 1000`)
+            
+        }
+		}
+    if(command.startsWith("set stockCount")) {
+        if(isNaN(Number(command.replace("set stockCount ", "")))!==true) {
+            stockCount = Number(command.replace("set stockCount", ""))
+        }else{
+            alert(`명령구문이 잘못되었습니다. \n예 : set stockCount 1000`)
+            
+        }
+    }
+}
+
+      
+setInterval(updateGame, 1000);
+setInterval(times, 41.6666666667);
+    setInterval(function() {
+        document.getElementById('money').innerText = '현재 잔액 : ' + money + "$" + ` (주식 : ${stockCount * stockValue}$)`;
+    document.getElementById('stockCount').innerText = '현재 주식 수량 : ' + stockCount + '개';
+    }, 1);
+    </script>
+</body>
+</html>
